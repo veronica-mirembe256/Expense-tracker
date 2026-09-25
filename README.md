@@ -1,6 +1,6 @@
 # Personal Expense Tracker
 
-A modern, client-only expense tracker built with **React, TypeScript, Vite, and Tailwind CSS**. Add expenses, search and filter them, visualize spending with charts, export to CSV, and toggle dark mode — all persisted entirely in the browser via Local Storage.
+A modern, client-only expense tracker built with **React, TypeScript, Vite, and Tailwind CSS**. Add expenses, search and filter them, visualize spending with charts, export to CSV, and toggle dark mode  all persisted entirely in the browser via Local Storage.
 
 Built as a take-home assessment. This README doubles as the design/architecture writeup you'd want going into a technical interview about it.
 
