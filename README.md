@@ -27,7 +27,7 @@ A modern, client-only expense tracker built with **React, TypeScript, Vite, and 
 - Export the currently filtered view to CSV
 - Pie chart (spending by category) and bar chart (spending by month), via Recharts
 - Dark mode toggle, persisted across sessions
-- All data lives in the browser — no backend, no database, no account
+- All data lives in the browser no backend, no database, no account
 
 ## Tech Stack
 
@@ -62,7 +62,7 @@ npm run preview
 npm run lint
 ```
 
-No environment variables, API keys, or backend setup are required — everything runs client-side.
+No environment variables, API keys, or backend setup are required everything runs client-side.
 
 ## Project Structure
 
@@ -107,12 +107,12 @@ src/
 
 ## Architecture
 
-**Data flow.** `ExpenseContext` owns the canonical list of expenses in a `useReducer` reducer (`ADD_EXPENSE`, `DELETE_EXPENSE`, `UPDATE_EXPENSE`, `SET_EXPENSES`). It's seeded from `useLocalStorage` on mount and re-synced to Local Storage on every change via a `useEffect`. Components never touch Local Storage directly — they call `addExpense` / `deleteExpense` from `useExpenses()` and read `filteredExpenses`, which is derived with `useMemo` from search term + category filter.
+**Data flow.** `ExpenseContext` owns the canonical list of expenses in a `useReducer` reducer (`ADD_EXPENSE`, `DELETE_EXPENSE`, `UPDATE_EXPENSE`, `SET_EXPENSES`). It's seeded from `useLocalStorage` on mount and re-synced to Local Storage on every change via a `useEffect`. Components never touch Local Storage directly  they call `addExpense` / `deleteExpense` from `useExpenses()` and read `filteredExpenses`, which is derived with `useMemo` from search term + category filter.
 
 **Component boundaries.**
 - **Presentational components** (`SummaryCard`, `SearchBar`, `CategoryFilter`, `ExpenseTable`, `Charts`) take props and render; they don't know about Local Storage or the reducer.
 - **`Dashboard`** is the composition layer — it reads from context and utils, and lays components out.
-- **`utils/`** are pure functions (formatting, aggregation, CSV serialization) — easy to unit test in isolation, no React or DOM dependency where possible.
+- **`utils/`** are pure functions (formatting, aggregation, CSV serialization)  easy to unit test in isolation, no React or DOM dependency where possible.
 - **`services/`** are the integration boundary between UI and "the outside world" (file downloads, future API calls). Kept thin today but gives a clear seam if, say, CSV export needed to become a server-side job later.
 
 **Typing.** `Category` is derived from the `CATEGORIES` const array (`(typeof CATEGORIES)[number]`) rather than declared separately, so the type and the runtime list can never drift out of sync.
@@ -157,8 +157,6 @@ The prompts themselves are generated programmatically from real data in `src/ser
 - "Export as CSV" exports the **currently filtered** view (respecting search + category filter), on the assumption that's more useful than always exporting everything.
 
 ## Possible Next Steps
-
-Deliberately out of scope for this assessment, but the natural next additions:
 - Edit-in-place for existing expenses (the reducer already supports `UPDATE_EXPENSE`)
 - Recurring expenses
 - CSV *import* (the export/parse logic in `utils/exportCSV.ts` would extend naturally)
