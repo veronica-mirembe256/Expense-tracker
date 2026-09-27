@@ -111,7 +111,7 @@ src/
 
 **Component boundaries.**
 - **Presentational components** (`SummaryCard`, `SearchBar`, `CategoryFilter`, `ExpenseTable`, `Charts`) take props and render; they don't know about Local Storage or the reducer.
-- **`Dashboard`** is the composition layer — it reads from context and utils, and lays components out.
+- **`Dashboard`** is the composition layer it reads from context and utils, and lays components out.
 - **`utils/`** are pure functions (formatting, aggregation, CSV serialization)  easy to unit test in isolation, no React or DOM dependency where possible.
 - **`services/`** are the integration boundary between UI and "the outside world" (file downloads, future API calls). Kept thin today but gives a clear seam if, say, CSV export needed to become a server-side job later.
 
