@@ -120,19 +120,19 @@ src/
 ## Design Decisions & Trade-offs
 
 **Why Local Storage instead of a backend?**
-The spec calls for it explicitly, and it's the right fit for a single-user, no-auth expense tracker: zero infrastructure, works offline, and data never leaves the device. The trade-off is real, though — it's per-browser (no sync across devices), capped at a few MB, and not a substitute for a database if this ever needed multi-user support. The `useLocalStorage` hook and `csvService` are the two places that would need to change if a backend were added later; nothing else in the component tree assumes Local Storage.
+The spec calls for it explicitly, and it's the right fit for a single-user, no-auth expense tracker: zero infrastructure, works offline, and data never leaves the device. The trade-off is real, though it's per-browser (no sync across devices), capped at a few MB, and not a substitute for a database if this ever needed multi-user support. The `useLocalStorage` hook and `csvService` are the two places that would need to change if a backend were added later; nothing else in the component tree assumes Local Storage.
 
 **Why Context + `useReducer` instead of Redux/Zustand?**
-The app has one meaningfully shared piece of state (the expense list) plus two small pieces of UI state (search term, category filter). A reducer gives predictable, testable state transitions (`ADD_EXPENSE`, `DELETE_EXPENSE`, etc.) without pulling in a state management library, its middleware, and its boilerplate for a problem this size. If the app grew multiple independent slices of global state with complex cross-cutting updates, or needed time-travel debugging / devtools, Redux Toolkit would start to earn its cost — but that's not this app.
+The app has one meaningfully shared piece of state (the expense list) plus two small pieces of UI state (search term, category filter). A reducer gives predictable, testable state transitions (`ADD_EXPENSE`, `DELETE_EXPENSE`, etc.) without pulling in a state management library, its middleware, and its boilerplate for a problem this size. If the app grew multiple independent slices of global state with complex cross-cutting updates, or needed time-travel debugging / devtools, Redux Toolkit would start to earn its cost  but that's not this app.
 
 **Why TypeScript throughout?**
 The domain is small but has several places where a typo or shape mismatch would only show up at runtime otherwise (category strings, form values before/after parsing, CSV columns). Strict mode plus the `Category` type derived from `CATEGORIES` means the compiler catches an invalid category or a missing form field before it ships, and the interfaces in `types/expense.ts` double as living documentation of the domain.
 
 **Why keep `utils/exportCSV.ts` and `services/csvService.ts` separate?**
-`exportCSV.ts` is a pure formatter (string in, string/Blob out) that's trivial to unit test. `csvService.ts` is the thin integration layer components actually call — today it's a pass-through, but it's the natural place to add e.g. multiple export formats or a server-side hand-off without touching `ExpenseTable`/`Dashboard`.
+`exportCSV.ts` is a pure formatter (string in, string/Blob out) that's trivial to unit test. `csvService.ts` is the thin integration layer components actually call  today it's a pass-through, but it's the natural place to add e.g. multiple export formats or a server-side hand-off without touching `ExpenseTable`/`Dashboard`.
 
 **Why no AI API calls in the app itself?**
-The take-home explicitly frames this as a *prompt engineering* exercise, not an "integrate an LLM API" one — and wiring in a live LLM call would mean shipping an API key to the client or standing up a backend, which contradicts the "Local Storage only, no backend" requirement. Instead, `services/aiInsights.ts` generates fully-formed, copy-pasteable prompts from the live expense data; see [AI-Powered Insights](#ai-powered-insights) below for the five prompts and example outputs.
+The take-home explicitly frames this as a *prompt engineering* exercise, not an "integrate an LLM API" one  and wiring in a live LLM call would mean shipping an API key to the client or standing up a backend, which contradicts the "Local Storage only, no backend" requirement. Instead, `services/aiInsights.ts` generates fully-formed, copy-pasteable prompts from the live expense data; see [AI-Powered Insights](#ai-powered-insights) below for the five prompts and example outputs.
 
 ## AI-Powered Insights
 
